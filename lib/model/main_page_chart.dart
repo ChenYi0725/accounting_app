@@ -98,10 +98,8 @@ class DonutChartPainter extends CustomPainter {
       text: "$centerText\n$balance",
       style: TextStyle(
           color: balance > 0
-              ? Colors.green // balance > 0 時顯示綠色
-              : (balance < 0
-                  ? Colors.red // balance < 0 時顯示紅色
-                  : Colors.grey.shade700),
+              ? Colors.green
+              : (balance < 0 ? Colors.red : Colors.grey.shade700),
           fontSize: 20,
           fontWeight: FontWeight.bold),
     );
@@ -145,10 +143,10 @@ class DonutChartPainter extends CustomPainter {
     double radius = size.width / 2 + 30;
     double x = size.width / 2 + radius * cos(angle) - textPainter.width / 2;
     double y = size.height / 2 + radius * sin(angle) - textPainter.height / 2;
-    if (y > 0 && label == "收入") {
+    if (y > 250 && label == "收入") {
       y = size.height / 2 + radius * sin(0) - textPainter.height / 2;
       x = size.width / 2 + radius * cos(0) - textPainter.width / 2;
-    } else if (y > 0 && label == "支出") {
+    } else if (y > 250 && label == "支出") {
       y = size.height / 2 - radius * sin(0) - textPainter.height / 2;
       x = size.width / 2 - radius * cos(0) - textPainter.width / 2;
     }

@@ -1,5 +1,6 @@
 import 'package:accounting_app/Controller/account_type_controller.dart';
 import 'package:accounting_app/Controller/calculator_controller.dart';
+import 'package:accounting_app/config.dart';
 import 'package:accounting_app/model/insert_type_list.dart';
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
@@ -25,7 +26,7 @@ class _InsertPageState extends State<EditPage> {
   String inputExpression = "";
   FocusNode _noteFocusNode = FocusNode();
   CalculatorController calculatorController = CalculatorController();
-
+  ColorConfig colorConfig = ColorConfig();
   AccountTypeController accountTypeController = AccountTypeController();
   List<String> get categories {
     if (transactionType == "支出") {
@@ -43,6 +44,7 @@ class _InsertPageState extends State<EditPage> {
     }
   }
 
+//-----------------
   @override
   void initState() {
     super.initState();
@@ -52,11 +54,10 @@ class _InsertPageState extends State<EditPage> {
   void _loadData() async {
     final data = await databaseHelper.fetchAccountById(widget.id);
     if (data != null) {
-      print("st");
       setState(() {
         transactionType = data['transactionType'] ?? "支出";
         insertType = data['type'] ?? "種類";
-        insertTypeIcon = Icon(Icons.abc);
+        insertTypeIcon = const Icon(Icons.abc);
         inputExpression = data['money']?.toString() ?? "";
         noteController.text = data['description'] ?? "";
         currentDate = data['date'] ?? "";

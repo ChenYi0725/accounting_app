@@ -9,6 +9,7 @@ class AccountTypeController {
     "健康",
     "教育",
     "旅遊",
+    "運動",
     "其他",
   ];
   final List<IconData> expenseIconCategories = [
@@ -19,6 +20,7 @@ class AccountTypeController {
     Icons.healing,
     Icons.border_color_outlined,
     Icons.airplanemode_active,
+    Icons.sports_volleyball,
     Icons.twenty_four_mp_outlined,
   ];
   final List<String> incomeTypeCategories = [

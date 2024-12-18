@@ -1,5 +1,6 @@
 import 'package:accounting_app/Controller/account_type_controller.dart';
 import 'package:accounting_app/Controller/calculator_controller.dart';
+import 'package:accounting_app/config.dart';
 import 'package:accounting_app/model/insert_type_list.dart';
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
@@ -24,7 +25,7 @@ class _InsertPageState extends State<InsertPage> {
   String inputExpression = "";
   FocusNode _noteFocusNode = FocusNode();
   CalculatorController calculatorController = CalculatorController();
-
+  ColorConfig colorConfig = ColorConfig();
   @override
   void initState() {
     super.initState();
@@ -130,7 +131,7 @@ class _InsertPageState extends State<InsertPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: colorConfig.mainColor,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context, "update"),
@@ -141,6 +142,9 @@ class _InsertPageState extends State<InsertPage> {
             TextButton(
               onPressed: () {
                 setState(() {
+                  insertType = accountTypeController.expenseTypeCategories[0];
+                  insertTypeIcon =
+                      accountTypeController.expenseIconCategories[0];
                   transactionType = "支出";
                 });
               },
@@ -155,6 +159,9 @@ class _InsertPageState extends State<InsertPage> {
             TextButton(
               onPressed: () {
                 setState(() {
+                  insertType = accountTypeController.incomeTypeCategories[0];
+                  insertTypeIcon =
+                      accountTypeController.incomeIconCategories[0];
                   transactionType = "收入";
                 });
               },
@@ -189,7 +196,7 @@ class _InsertPageState extends State<InsertPage> {
           ),
           SizedBox(height: 16),
           Container(
-            color: Colors.yellow[100],
+            color: colorConfig.calculatorColor1,
             child: Row(
               children: [
                 Row(
@@ -216,7 +223,7 @@ class _InsertPageState extends State<InsertPage> {
                       focusNode: _noteFocusNode,
                       decoration: InputDecoration(
                         labelText: "備註",
-                        border: OutlineInputBorder(),
+                        border: InputBorder.none,
                       ),
                     ),
                   ),
@@ -227,7 +234,7 @@ class _InsertPageState extends State<InsertPage> {
           ),
           Expanded(
             child: Container(
-              color: Colors.yellow,
+              color: colorConfig.calculatorColor2,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: CalculatorView(onCalculatorPress: onCalculatorPress),

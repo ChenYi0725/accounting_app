@@ -1,3 +1,4 @@
+import 'package:accounting_app/pages/type_setting_page.dart';
 import 'package:flutter/material.dart';
 
 import '../Controller/account_type_controller.dart';
@@ -24,23 +25,46 @@ class InsertTypeList extends StatelessWidget {
           mainAxisSpacing: 8,
           childAspectRatio: 2,
         ),
-        itemCount: categories.length,
+        itemCount: categories.length + 1,
         itemBuilder: (context, index) {
-          return ElevatedButton(
-            onPressed: () {
-              onTypeSelected(categories[index], iconCategories[index]);
-            },
-            child: Row(children: [
-              Icon(
-                iconCategories[index],
-                size: 18,
-              ),
-              Text(
-                categories[index],
-                style: const TextStyle(fontSize: 13),
-              )
-            ]), // 顯示文字
-          );
+          if (index < categories.length) {
+            return ElevatedButton(
+              onPressed: () {
+                onTypeSelected(categories[index], iconCategories[index]);
+              },
+              child: Row(children: [
+                Icon(
+                  iconCategories[index],
+                  size: 18,
+                ),
+                Text(
+                  categories[index],
+                  style: const TextStyle(fontSize: 13),
+                )
+              ]), // 顯示文字
+            );
+          } else {
+            return ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const TypeSettingPage()))
+                    .then((result) {});
+              },
+              child: const Row(children: [
+                Icon(
+                  Icons.settings,
+                  color: Colors.black,
+                  size: 18,
+                ),
+                Text(
+                  "設定",
+                  style: TextStyle(fontSize: 13, color: Colors.black),
+                )
+              ]), // 顯示文字
+            );
+          }
         },
       ),
     );
