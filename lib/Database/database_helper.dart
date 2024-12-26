@@ -9,6 +9,7 @@ class DatabaseHelper {
 
   static Database? _accountDatabase;
   static Database? _insertTypeDatabase;
+  static Database? _vehicleDatabase;
 
   // 獲取 accounts 資料庫
   Future<Database> get accountDatabase async {
@@ -36,6 +37,12 @@ class DatabaseHelper {
     if (_insertTypeDatabase != null) return _insertTypeDatabase!;
     _insertTypeDatabase = await _initInsertTypeDatabase();
     return _insertTypeDatabase!;
+  }
+
+  Future<Database> get vehicleDatabase async {
+    if (_vehicleDatabase != null) return _vehicleDatabase!;
+    _vehicleDatabase = await _initVehicleDatabase();
+    return _vehicleDatabase!;
   }
 
   // 初始化 accounts.db
@@ -75,6 +82,25 @@ class DatabaseHelper {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             icon TEXT NOT NULL
+          )
+        ''');
+      },
+    );
+  }
+
+  // 初始化 vehicles.db
+  Future<Database> _initVehicleDatabase() async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, 'vehicles.db');
+
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: (db, version) {
+        db.execute('''
+          CREATE TABLE vehicles (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            number TEXT NOT NULL
           )
         ''');
       },
@@ -170,5 +196,47 @@ class DatabaseHelper {
   Future<int> deleteType(int id) async {
     final db = await insertTypeDatabase;
     return await db.delete('custom_types', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // 插入 vehicles 資料表
+  Future<int> insertVehicle(String number) async {
+    final db = await vehicleDatabase;
+    return await db.insert('vehicles', {
+      'number': number,
+    });
+  }
+
+  Future<Map<String, dynamic>?> fetchVehicle() async {
+    final db = await vehicleDatabase;
+    final result = await db.query('vehicles');
+
+    if (result.isNotEmpty) {
+      return result.first;
+    } else {
+      return null;
+    }
+  }
+
+  Future<int> updateVehicle(String number) async {
+    final db = await vehicleDatabase;
+    final vehicle = await fetchVehicle();
+
+    if (vehicle != null) {
+      return await db.update(
+        'vehicles',
+        {
+          'number': number,
+        },
+        where: 'id = ?',
+        whereArgs: [vehicle['id']],
+      );
+    } else {
+      return await insertVehicle(number);
+    }
+  }
+
+  Future<int> deleteVehicle(int id) async {
+    final db = await vehicleDatabase;
+    return await db.delete('vehicles', where: 'id = ?', whereArgs: [id]);
   }
 }

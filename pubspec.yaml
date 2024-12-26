@@ -39,6 +39,7 @@ dependencies:
   math_expressions: ^2.6.0
   intl: ^0.20.1
   flutter_pie_chart: ^0.0.1
+  barcode_widget: ^2.0.4
 
 dev_dependencies:
   flutter_test:

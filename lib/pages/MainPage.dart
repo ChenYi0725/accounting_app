@@ -1,5 +1,6 @@
 import 'package:accounting_app/Database/database_helper.dart';
 import 'package:accounting_app/config.dart';
+import 'package:accounting_app/model/bar_code.dart';
 import 'package:accounting_app/model/main_page_drawer.dart';
 import 'package:accounting_app/model/summary.dart';
 import 'package:accounting_app/pages/insert_page.dart';
@@ -25,6 +26,7 @@ class _MainPageState extends State<MainPage> {
   DateTime currentDate = DateTime.now();
   int totalExpense = 0;
   int totalIncome = 0;
+  bool isChartShow = false;
 
   String getFormattedDate() {
     DateFormat dateFormat;
@@ -51,6 +53,11 @@ class _MainPageState extends State<MainPage> {
       timeIndex = (timeIndex + 1) % periods.length;
       _fetchTotalData();
     });
+  }
+
+  void updateMainPage() {
+    _fetchTotalData();
+    setState(() {});
   }
 
   void _addDate() {
@@ -173,7 +180,9 @@ class _MainPageState extends State<MainPage> {
         ),
         backgroundColor: colorConfig.mainColor,
       ),
-      drawer: const MainPageDrawer(),
+      drawer: MainPageDrawer(
+        updateMainPage: updateMainPage,
+      ),
       body: Column(
         children: [
           Padding(
@@ -208,12 +217,20 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
           Expanded(
-              child: SizedBox(
-            height: 20,
-            child: DonutChart(
-              firstSectionValue: totalIncome.toDouble(),
-              secondSectionValue: totalExpense.toDouble(),
-              balance: (totalIncome - totalExpense),
+              child: GestureDetector(
+            onLongPress: () {
+              isChartShow = !isChartShow;
+              setState(() {});
+            },
+            child: SizedBox(
+              height: 20,
+              child: isChartShow
+                  ? DonutChart(
+                      firstSectionValue: totalIncome.toDouble(),
+                      secondSectionValue: totalExpense.toDouble(),
+                      balance: (totalIncome - totalExpense),
+                    )
+                  : BarCode(),
             ),
           )),
           Container(
