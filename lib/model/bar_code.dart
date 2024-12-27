@@ -27,7 +27,7 @@ class BarCode extends StatelessWidget {
                     final double screenWidth = constraints.maxWidth;
                     return BarcodeWidget(
                       data: vehicleNumber,
-                      barcode: Barcode.code128(), // or other barcode type
+                      barcode: Barcode.code39(), // or other barcode type
                       width: screenWidth,
                       height: screenWidth / 4,
                       color: Colors.black,

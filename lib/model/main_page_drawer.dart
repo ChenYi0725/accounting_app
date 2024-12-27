@@ -1,6 +1,9 @@
 import 'package:accounting_app/Database/database_helper.dart';
 import 'package:flutter/material.dart';
 
+import '../pages/insert_page.dart';
+import '../pages/insert_type_setting_page.dart';
+
 class MainPageDrawer extends StatefulWidget {
   final VoidCallback updateMainPage;
   MainPageDrawer({super.key, required this.updateMainPage});
@@ -95,9 +98,12 @@ class _MainPageDrawerState extends State<MainPageDrawer> {
             },
           ),
           ListTile(
-            title: Text('選項 2'),
+            title: const Text('自訂義記帳種類'),
             onTap: () {
-              // 點擊選項後的操作
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => InsertTypeSettingPage()));
             },
           ),
         ],

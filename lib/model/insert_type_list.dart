@@ -1,7 +1,5 @@
-import 'package:accounting_app/pages/type_setting_page.dart';
 import 'package:flutter/material.dart';
-
-import '../Controller/account_type_controller.dart';
+import '../pages/insert_type_setting_page.dart';
 
 class InsertTypeList extends StatelessWidget {
   final Function(String, IconData) onTypeSelected;
@@ -49,7 +47,7 @@ class InsertTypeList extends StatelessWidget {
                 Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const TypeSettingPage()))
+                            builder: (context) => InsertTypeSettingPage()))
                     .then((result) {});
               },
               child: const Row(children: [

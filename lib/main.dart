@@ -1,4 +1,5 @@
 import 'package:accounting_app/pages/MainPage.dart';
+import 'package:accounting_app/pages/insert_type_setting_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
