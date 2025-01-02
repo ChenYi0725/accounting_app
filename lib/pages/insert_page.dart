@@ -1,7 +1,7 @@
-import 'package:accounting_app/Controller/account_type_controller.dart';
+import 'package:accounting_app/model/init_insert_type.dart';
 import 'package:accounting_app/Controller/calculator_controller.dart';
 import 'package:accounting_app/config.dart';
-import 'package:accounting_app/model/insert_type_list.dart';
+import 'package:accounting_app/small_widget/insert_type_list.dart';
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
 
@@ -17,7 +17,7 @@ class InsertPage extends StatefulWidget {
 }
 
 class _InsertPageState extends State<InsertPage> {
-  AccountTypeController accountTypeController = AccountTypeController();
+  initInsertType accountTypeController = initInsertType();
   late String insertType;
   String transactionType = "支出";
   late IconData insertTypeIcon;

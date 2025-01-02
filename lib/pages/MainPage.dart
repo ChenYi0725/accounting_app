@@ -1,14 +1,14 @@
 import 'package:accounting_app/Database/database_helper.dart';
 import 'package:accounting_app/config.dart';
-import 'package:accounting_app/model/bar_code.dart';
-import 'package:accounting_app/model/main_page_drawer.dart';
-import 'package:accounting_app/model/summary.dart';
+import 'package:accounting_app/small_widget/bar_code.dart';
+import 'package:accounting_app/small_widget/main_page_drawer.dart';
+import 'package:accounting_app/small_widget/summary.dart';
 import 'package:accounting_app/pages/insert_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../model/account_list.dart';
-import '../model/main_page_chart.dart';
+import '../small_widget/account_list.dart';
+import '../small_widget/main_page_chart.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -125,6 +125,12 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _fetchTotalData();
+  }
+
   void _initDate() {
     currentDate = DateTime.now();
     _fetchTotalData();
@@ -221,10 +227,12 @@ class _MainPageState extends State<MainPage> {
             child: GestureDetector(
               onLongPress: () {
                 isChartShow = !isChartShow;
+                _fetchTotalData();
                 setState(() {});
               },
               onHorizontalDragEnd: (DragEndDetails details) {
                 isChartShow = !isChartShow;
+                _fetchTotalData();
                 setState(() {});
               },
               child: Container(

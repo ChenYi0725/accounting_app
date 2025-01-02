@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AccountTypeController {
+class initInsertType {
   final List<String> expenseTypeCategories = [
     "餐飲",
     "交通",

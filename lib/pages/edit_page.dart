@@ -1,7 +1,7 @@
-import 'package:accounting_app/Controller/account_type_controller.dart';
+import 'package:accounting_app/model/init_insert_type.dart';
 import 'package:accounting_app/Controller/calculator_controller.dart';
 import 'package:accounting_app/config.dart';
-import 'package:accounting_app/model/insert_type_list.dart';
+import 'package:accounting_app/small_widget/insert_type_list.dart';
 import 'package:flutter/material.dart';
 import 'package:math_expressions/math_expressions.dart';
 
@@ -27,7 +27,7 @@ class _InsertPageState extends State<EditPage> {
   FocusNode _noteFocusNode = FocusNode();
   CalculatorController calculatorController = CalculatorController();
   ColorConfig colorConfig = ColorConfig();
-  AccountTypeController accountTypeController = AccountTypeController();
+  initInsertType accountTypeController = initInsertType();
   List<String> get categories {
     if (transactionType == "支出") {
       return accountTypeController.expenseTypeCategories;
