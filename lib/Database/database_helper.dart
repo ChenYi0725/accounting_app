@@ -192,42 +192,55 @@ class DatabaseHelper {
     });
   }
 
-// 從資料庫中獲取圖標並顯示
-  Future<Icon> getIcon(int id) async {
+// // 從資料庫中獲取圖標並顯示
+//   Future<Icon> getIcon(int id) async {
+//     final db = await insertTypeDatabase;
+//     List<Map<String, dynamic>> result =
+//         await db.query('custom_types', where: 'id = ?', whereArgs: [id]);
+//
+//     if (result.isNotEmpty) {
+//       String iconName = result[0]['iconName']; // 讀取圖標名稱
+//       return Icon(_getIconData(iconName)); // 使用對應的 Icon
+//     }
+//
+//     return Icon(Icons.help_outline); // 如果找不到圖標，返回預設圖標
+//   }
+//
+// // 根據圖標名稱返回對應的 IconData
+//   IconData _getIconData(String iconName) {
+//     switch (iconName) {
+//       case 'Icons.home':
+//         return Icons.home;
+//       case 'Icons.account_circle':
+//         return Icons.account_circle;
+//       default:
+//         return Icons.help_outline; // 預設圖標
+//     }
+//   }
+
+  // 查詢所有 insertType
+  Future<List<Map<String, dynamic>>> fetchInsertTypes(int isExpense) async {
     final db = await insertTypeDatabase;
-    List<Map<String, dynamic>> result =
-        await db.query('custom_types', where: 'id = ?', whereArgs: [id]);
-
-    if (result.isNotEmpty) {
-      String iconName = result[0]['iconName']; // 讀取圖標名稱
-      return Icon(_getIconData(iconName)); // 使用對應的 Icon
-    }
-
-    return Icon(Icons.help_outline); // 如果找不到圖標，返回預設圖標
-  }
-
-// 根據圖標名稱返回對應的 IconData
-  IconData _getIconData(String iconName) {
-    switch (iconName) {
-      case 'Icons.home':
-        return Icons.home;
-      case 'Icons.account_circle':
-        return Icons.account_circle;
-      // 可以根據需求擴展更多圖標
-      default:
-        return Icons.help_outline; // 預設圖標
-    }
-  }
-
-  // 查詢所有支出的 custom_types
-  Future<List<Map<String, dynamic>>> fetchExpenseTypes(int isExpense) async {
-    final db = await insertTypeDatabase;
-
     return await db.query(
       'custom_types',
       where: 'isExpense = ?',
       whereArgs: [isExpense], // 1 代表支出
     );
+  }
+
+  Future<List<Map<String, dynamic>>> _fetchInsertTypesToList(
+      int isExpense) async {
+    final dbHelper = DatabaseHelper();
+    final rawTypes = await dbHelper.fetchInsertTypes(isExpense); // 0 表示收入
+    return rawTypes
+        .map((type) => {
+              'name': type['name'] as String,
+              'icon': IconData(
+                int.parse(type['iconName']),
+                fontFamily: 'MaterialIcons',
+              )
+            })
+        .toList();
   }
 
   Future<List<Map<String, dynamic>>> fetchTypes() async {

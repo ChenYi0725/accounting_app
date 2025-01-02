@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import '../Database/database_helper.dart';
 
 class InsertTypeSettingPage extends StatefulWidget {
+  final VoidCallback updatePage;
+
+  const InsertTypeSettingPage({super.key, required this.updatePage});
+
   @override
   _InsertTypeSettingPageState createState() => _InsertTypeSettingPageState();
 }
@@ -10,12 +14,11 @@ class InsertTypeSettingPage extends StatefulWidget {
 class _InsertTypeSettingPageState extends State<InsertTypeSettingPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _iconController = TextEditingController();
-  bool _isExpense = false;
+  bool _isExpense = true;
   bool isIconChoose = false;
   late Future<List<Map<String, dynamic>>> _expenseTypes;
   late Future<List<Map<String, dynamic>>> _incomeTypes;
   ColorConfig colorConfig = ColorConfig();
-  late String insertType;
   String transactionType = "支出";
 
   final List<IconData> _iconList = [
@@ -29,13 +32,13 @@ class _InsertTypeSettingPageState extends State<InsertTypeSettingPage> {
     Icons.assessment,
     Icons.beach_access,
     Icons.business,
+    Icons.ice_skating,
   ];
 
   @override
   void initState() {
     super.initState();
     _iconController.text = Icons.home.codePoint.toString();
-
     _fetchTypes();
   }
 
@@ -97,14 +100,14 @@ class _InsertTypeSettingPageState extends State<InsertTypeSettingPage> {
           itemBuilder: (context, index) {
             IconData iconData = _iconList[index];
             return IconButton(
-              icon: Icon(iconData, size: 30), // 調整圖示大小
+              icon: Icon(iconData, size: 30),
               onPressed: () {
                 setState(() {
-                  _iconController.text =
-                      iconData.codePoint.toString(); // 設定選擇的圖標
+                  _iconController.text = iconData.codePoint.toString();
                   isIconChoose = true;
+                  widget.updatePage();
+                  Navigator.pop(context);
                 });
-                Navigator.pop(context); // 關閉選擇器
               },
             );
           },
@@ -119,6 +122,13 @@ class _InsertTypeSettingPageState extends State<InsertTypeSettingPage> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('收入/支出種類設定'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            widget.updatePage;
+            Navigator.pop(context);
+          },
+        ),
         backgroundColor: colorConfig.mainColor,
       ),
       body: Padding(
@@ -142,7 +152,7 @@ class _InsertTypeSettingPageState extends State<InsertTypeSettingPage> {
                         color: transactionType == "支出"
                             ? colorConfig.secondColor
                             : Colors.grey,
-                        fontSize: 18), // 調整文字大小
+                        fontSize: 18),
                   ),
                 ),
                 Text("|",
@@ -177,28 +187,24 @@ class _InsertTypeSettingPageState extends State<InsertTypeSettingPage> {
                   ),
                 ),
                 Expanded(
-                    flex: 1,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: GestureDetector(
-                        onTap: _selectIcon,
-                        child: Center(
-                          child: Row(
-                            children: [
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              isIconChoose &&
-                                      stringToIcon(_iconController.text) != null
-                                  ? Icon(stringToIcon(_iconController.text),
-                                      size: 24) // 調整圖示大小
-                                  : const SizedBox.shrink(),
-                              const Text("選擇圖示"),
-                            ],
-                          ),
-                        ),
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton.icon(
+                      onPressed: _selectIcon,
+                      icon: isIconChoose &&
+                              stringToIcon(_iconController.text) != null
+                          ? Icon(stringToIcon(_iconController.text), size: 24)
+                          : const SizedBox.shrink(),
+                      label: const Text('選擇圖示'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 16),
+                        textStyle: const TextStyle(fontSize: 16),
                       ),
-                    )),
+                    ),
+                  ),
+                ),
               ],
             ),
             const SizedBox(
@@ -212,90 +218,43 @@ class _InsertTypeSettingPageState extends State<InsertTypeSettingPage> {
             ),
             const SizedBox(height: 20),
             Expanded(
-              flex: 1,
-              child: Column(
-                children: [
-                  // 顯示支出類型
-                  if (_isExpense) ...[
-                    const Text('目前自訂支出種類',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    FutureBuilder<List<Map<String, dynamic>>>(
-                      future: _expenseTypes,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        }
+              child: FutureBuilder<List<Map<String, dynamic>>>(
+                future: _isExpense ? _expenseTypes : _incomeTypes,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                          return const Center(child: Text('沒有支出種類'));
-                        }
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(
+                      child: Text(
+                        _isExpense ? '沒有支出種類' : '沒有收入種類',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    );
+                  }
 
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            final type = snapshot.data![index];
-                            return ListTile(
-                              leading: Icon(
-                                IconData(int.parse(type['iconName']),
-                                    fontFamily: 'MaterialIcons'),
-                                size: 20, // 調整圖示大小
-                              ),
-                              title: Text(type['name']),
-                              trailing: IconButton(
-                                icon: const Icon(Icons.delete),
-                                onPressed: () {
-                                  _deleteType(type['id']);
-                                },
-                              ),
-                            );
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      final type = snapshot.data![index];
+                      return ListTile(
+                        leading: Icon(
+                          IconData(int.parse(type['iconName']),
+                              fontFamily: 'MaterialIcons'),
+                          size: 20,
+                        ),
+                        title: Text(type['name']),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            _deleteType(type['id']);
                           },
-                        );
-                      },
-                    ),
-                  ],
-                  const SizedBox(height: 20),
-                  // 顯示收入類型
-                  if (!_isExpense) ...[
-                    const Text('目前自訂收入種類',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                  ],
-                  FutureBuilder<List<Map<String, dynamic>>>(
-                    future: _incomeTypes,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      }
-
-                      if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return const Center(child: Text('沒有收入種類'));
-                      }
-
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          final type = snapshot.data![index];
-                          return ListTile(
-                            leading: Icon(
-                              IconData(int.parse(type['iconName']),
-                                  fontFamily: 'MaterialIcons'),
-                              size: 20, // 調整圖示大小
-                            ),
-                            title: Text(type['name']),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                _deleteType(type['id']);
-                              },
-                            ),
-                          );
-                        },
+                        ),
                       );
                     },
-                  ),
-                ],
+                  );
+                },
               ),
             ),
           ],

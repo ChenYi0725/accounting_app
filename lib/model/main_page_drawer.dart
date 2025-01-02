@@ -85,7 +85,6 @@ class _MainPageDrawerState extends State<MainPageDrawer> {
                       TextButton(
                         onPressed: () {
                           _updateVehicleNumber(_controller.text);
-
                           Navigator.of(context).pop();
                           widget.updateMainPage();
                         },
@@ -103,7 +102,9 @@ class _MainPageDrawerState extends State<MainPageDrawer> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => InsertTypeSettingPage()));
+                      builder: (context) => InsertTypeSettingPage(
+                            updatePage: () {},
+                          )));
             },
           ),
         ],

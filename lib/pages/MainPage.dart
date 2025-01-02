@@ -218,22 +218,34 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
           Expanded(
-              child: GestureDetector(
-            onLongPress: () {
-              isChartShow = !isChartShow;
-              setState(() {});
-            },
-            child: SizedBox(
-              height: 20,
-              child: isChartShow
-                  ? DonutChart(
-                      firstSectionValue: totalIncome.toDouble(),
-                      secondSectionValue: totalExpense.toDouble(),
-                      balance: (totalIncome - totalExpense),
-                    )
-                  : BarCode(),
+            child: GestureDetector(
+              onLongPress: () {
+                isChartShow = !isChartShow;
+                setState(() {});
+              },
+              onHorizontalDragEnd: (DragEndDetails details) {
+                isChartShow = !isChartShow;
+                setState(() {});
+              },
+              child: Container(
+                color: Colors.transparent,
+                height: 200,
+                child: isChartShow
+                    ? DonutChart(
+                        firstSectionValue: totalIncome.toDouble(),
+                        secondSectionValue: totalExpense.toDouble(),
+                        balance: (totalIncome - totalExpense),
+                      )
+                    : Align(
+                        alignment: Alignment.center,
+                        child: SizedBox(
+                          width: 250,
+                          child: BarCode(),
+                        ),
+                      ),
+              ),
             ),
-          )),
+          ),
           Container(
             color: colorConfig.listColor2,
             height: 2,

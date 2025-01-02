@@ -51,6 +51,11 @@ class _InsertPageState extends State<EditPage> {
     _loadData(); // 載入資料的方法
   }
 
+  void updatePage() {
+    int a = 0;
+    setState(() {});
+  }
+
   void _loadData() async {
     final data = await databaseHelper.fetchAccountById(widget.id);
     if (data != null) {
@@ -204,10 +209,14 @@ class _InsertPageState extends State<EditPage> {
       ),
       body: Column(
         children: [
-          InsertTypeList(
-            onTypeSelected: _onTypeSelected,
-            categories: categories,
-            iconCategories: iconCategories,
+          Expanded(
+            child: InsertTypeList(
+              onTypeSelected: _onTypeSelected,
+              categories: categories,
+              iconCategories: iconCategories,
+              transactionType: transactionType,
+              updatePage: updatePage,
+            ),
           ),
           SizedBox(height: 16),
           Container(

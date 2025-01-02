@@ -48,6 +48,11 @@ class _InsertPageState extends State<InsertPage> {
     }
   }
 
+  void updatePage() {
+    print("update");
+    setState(() {});
+  }
+
   List<IconData> get iconCategories {
     if (transactionType == "支出") {
       return accountTypeController.expenseIconCategories;
@@ -189,10 +194,14 @@ class _InsertPageState extends State<InsertPage> {
       ),
       body: Column(
         children: [
-          InsertTypeList(
-            onTypeSelected: _onTypeSelected,
-            categories: categories,
-            iconCategories: iconCategories,
+          Expanded(
+            child: InsertTypeList(
+              onTypeSelected: _onTypeSelected,
+              categories: categories,
+              iconCategories: iconCategories,
+              transactionType: transactionType,
+              updatePage: updatePage,
+            ),
           ),
           SizedBox(height: 16),
           Container(

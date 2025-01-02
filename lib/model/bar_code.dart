@@ -29,7 +29,7 @@ class BarCode extends StatelessWidget {
                       data: vehicleNumber,
                       barcode: Barcode.code39(), // or other barcode type
                       width: screenWidth,
-                      height: screenWidth / 4,
+                      height: screenWidth / 3,
                       color: Colors.black,
                       backgroundColor: Colors.white,
                     );
@@ -38,7 +38,11 @@ class BarCode extends StatelessWidget {
               ],
             );
           } else {
-            return Text('無載具資料');
+            return const Column(
+              children: [
+                Text('無載具資料'),
+              ],
+            );
           }
         },
       ),
