@@ -48,7 +48,7 @@ class _InsertPageState extends State<EditPage> {
   @override
   void initState() {
     super.initState();
-    _loadData(); // 載入資料的方法
+    _loadData();
   }
 
   void updatePage() {
@@ -89,7 +89,7 @@ class _InsertPageState extends State<EditPage> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // 關閉對話框
+                Navigator.of(context).pop();
               },
               child: Text('確定'),
             ),

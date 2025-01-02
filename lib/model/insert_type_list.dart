@@ -23,7 +23,7 @@ class InsertTypeList extends StatelessWidget {
   Future<List<Map<String, dynamic>>> _fetchInsertTypesToList(
       int isExpense) async {
     final dbHelper = DatabaseHelper();
-    final rawTypes = await dbHelper.fetchInsertTypes(isExpense); // 獲取資料庫類型
+    final rawTypes = await dbHelper.fetchInsertTypes(isExpense);
     return rawTypes
         .map((type) => {
               'name': type['name'] as String,

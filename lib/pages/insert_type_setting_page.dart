@@ -33,6 +33,8 @@ class _InsertTypeSettingPageState extends State<InsertTypeSettingPage> {
     Icons.beach_access,
     Icons.business,
     Icons.ice_skating,
+    Icons.icecream_rounded,
+    Icons.incomplete_circle
   ];
 
   @override
