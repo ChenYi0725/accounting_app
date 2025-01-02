@@ -26,7 +26,7 @@ class _MainPageState extends State<MainPage> {
   DateTime currentDate = DateTime.now();
   int totalExpense = 0;
   int totalIncome = 0;
-  bool isChartShow = false;
+  bool isChartShow = true;
 
   String getFormattedDate() {
     DateFormat dateFormat;
@@ -268,10 +268,9 @@ class _MainPageState extends State<MainPage> {
               MaterialPageRoute(
                   builder: (context) => InsertPage(
                         currentDate: currentDate,
-                      ))).then((result) {
-            if (result != null) {
-              setState(() {});
-            }
+                      ))).then((result) async {
+            _fetchTotalData();
+            setState(() {});
           });
         },
         backgroundColor: colorConfig.secondColor,
